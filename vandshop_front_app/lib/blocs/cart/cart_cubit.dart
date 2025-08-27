@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import '../../../core/models/product.dart';
-import '../data/products_repository.dart';
+import '../../../../features/core/models/product.dart';
+import '../../../../features/products/data/data/products_repository.dart';
 
 part 'products_event.dart';
 part 'products_state.dart';
