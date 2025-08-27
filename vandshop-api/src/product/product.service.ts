@@ -46,10 +46,7 @@ export class ProductService {
     const products = await this.prisma.product.findMany({
       where: q
         ? {
-            OR: [
-              { name: { contains: q, mode: 'insensitive' } },
-              { barcode: { contains: q } },
-            ],
+            OR: [{ name: { contains: q } }, { barcode: { contains: q } }],
           }
         : undefined,
       orderBy: { createdAt: 'desc' },
@@ -68,7 +65,12 @@ export class ProductService {
   // }
 
   update(id: string, data: Partial<CreateProductDto>) {
-    return this.prisma.product.update({ where: { id }, data });
+    const { category, ...rest } = data;
+    const updateData: any = { ...rest };
+    if (category !== undefined) {
+      updateData.category = { connect: { id: category } };
+    }
+    return this.prisma.product.update({ where: { id }, data: updateData });
   }
 
   remove(id: string) {

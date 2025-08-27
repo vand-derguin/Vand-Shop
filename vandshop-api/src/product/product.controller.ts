@@ -46,14 +46,14 @@ export class ProductController {
   //   return this.productService.findAll();
   // }
 
-  @Get()
-  findOne(@Param('id') id: string) {
-    return this.productService.findOne(+id);
-  }
+  // @Get()
+  // findOne(@Param('id') id: string) {
+  //   return this.productService.findOne(+id);
+  // }
 
   @Patch()
   update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
-    return this.productService.update(+id, updateProductDto);
+    return this.productService.update(id, updateProductDto);
   }
 
   @ApiBearerAuth()
