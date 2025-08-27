@@ -1,0 +1,33 @@
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_$ProductmodelImpl _$$ProductmodelImplFromJson(Map<String, dynamic> json) =>
+    _$ProductmodelImpl(
+      id: (json['id'] as num).toInt(),
+      name: json['name'] as String,
+      price: json['price'] as String,
+      description: json['description'] as String,
+      barcode: json['barcode'] as String,
+      stock: json['stock'] as String,
+      categoryId: (json['categoryId'] as num).toInt(),
+      createdAt: DateTime.parse(json['createdAt'] as String),
+      updateAt: DateTime.parse(json['updateAt'] as String),
+      productimages: (json['ProductImage'] as List<dynamic>?)
+          ?.map((e) => Productimage.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$$ProductmodelImplToJson(_$ProductmodelImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'price': instance.price,
+      'description': instance.description,
+      'barcode': instance.barcode,
+      'stock': instance.stock,
+      'categoryId': instance.categoryId,
+      'createdAt': instance.createdAt.toIso8601String(),
+      'updateAt': instance.updateAt.toIso8601String(),
+      'ProductImage': instance.productimages,
+    };

@@ -1,0 +1,1 @@
+ /home/derguin/Documents/Dev/Vand-Shop/vandshop_front_app/.dart_tool/flutter_build/a0a49b46506f712f8e657a46e59d5504/native_assets.json: 
