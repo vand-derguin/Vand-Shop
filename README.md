@@ -1,3 +1,3 @@
 # Vand-Shop
 description
-/somthin
+/somthing
