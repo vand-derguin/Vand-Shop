@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
-// Seeding an admin user
+// def d'un utilisateur administrateur
 const prisma = new PrismaClient();
 
 async function main() {
