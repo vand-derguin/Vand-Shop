@@ -1,11 +1,8 @@
-part of 'products_bloc.dart';
+import 'package:equatable/equatable.dart';
 
 abstract class ProductsEvent extends Equatable {
   @override
   List<Object?> get props => [];
 }
 
-class ProductsRequested extends ProductsEvent {
-  final String? query;
-  ProductsRequested({this.query});
-}
+class LoadProducts extends ProductsEvent {}

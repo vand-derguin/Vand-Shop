@@ -1,22 +1,28 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import '../../../../features/core/models/product.dart';
-import '../../../../features/products/data/data/products_repository.dart';
 
-part 'products_event.dart';
-part 'products_state.dart';
+class ProductsState extends Equatable {
+  final List<dynamic> products;
+  final bool loading;
+  final String? error;
 
-class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
-  final ProductsRepository repo;
-  ProductsBloc(this.repo) : super(ProductsLoading()) {
-    on<ProductsRequested>((e, emit) async {
-      emit(ProductsLoading());
-      try {
-        final items = await repo.list(q: e.query);
-        emit(ProductsLoaded(items));
-      } catch (_) {
-        emit(ProductsError());
-      }
-    });
+  const ProductsState({
+    this.products = const [],
+    this.loading = false,
+    this.error,
+  });
+
+  ProductsState copyWith({
+    List<dynamic>? products,
+    bool? loading,
+    String? error,
+  }) {
+    return ProductsState(
+      products: products ?? this.products,
+      loading: loading ?? this.loading,
+      error: error,
+    );
   }
+
+  @override
+  List<Object?> get props => [products, loading, error];
 }

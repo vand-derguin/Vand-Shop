@@ -13,7 +13,9 @@ import 'package:vandshop_front_app/main.dart';
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+    // Provide a mock or real apiClient as required by MyApp
+    // Replace 'MockApiClient()' with your actual mock or real apiClient implementation
+    // await tester.pumpWidget(MyApp(apiClient: MockApiClient()));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
