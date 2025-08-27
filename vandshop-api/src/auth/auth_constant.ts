@@ -1,3 +1,5 @@
 export const authConstants = {
-    secret: 'MySuperSecret',
+  secret: 'MysuperSecret',
+  expire: '2d',
+  //   exipire: 'process.env'
 };

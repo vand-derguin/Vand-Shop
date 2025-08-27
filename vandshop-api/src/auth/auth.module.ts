@@ -1,23 +1,19 @@
 import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { UserModule } from '../user/user.module';
-import { JwtModule } from '@nestjs/jwt';
-import { authConstants } from './auth_constant';
-import { JwtStrategy } from './jwt_strategy';
-
+import { JwtStrategy } from './jwt.strategy';
+import { PrismaModule } from '../prisma/prisma.module';
 
 @Module({
-  imports: [UserModule,
+  imports: [
+    PrismaModule,
     JwtModule.register({
-      secret: authConstants.secret,
-      signOptions:{
-        expiresIn: '1d'
-      }
-    })
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: process.env.JWT_EXPIRES || '2d' },
+    }),
   ],
-  
   controllers: [AuthController],
-  providers: [AuthService, ],
+  providers: [AuthService, JwtStrategy],
 })
 export class AuthModule {}
