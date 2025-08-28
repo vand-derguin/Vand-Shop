@@ -66,7 +66,7 @@ class _ProductsPageState extends State<ProductsPage> {
                   },
                   child: const Text(
                     "Login",
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Color(0xFF080404)),
                   ),
                 );
               }
@@ -205,7 +205,7 @@ class _ProductsPageState extends State<ProductsPage> {
                             ),
                           ),
                           const SizedBox(height: 4),
-                          Text("Price: ${product["price"] ?? "?"}"),
+                          Text("fcfa: ${product["price"] ?? "?"}"),
                           const SizedBox(height: 8),
                           ElevatedButton(
                             onPressed: () {

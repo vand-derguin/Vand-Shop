@@ -65,7 +65,7 @@ class CartPage extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      "Total: \$${totalPrice.toStringAsFixed(2)}",
+                      "Total: fcfa ${totalPrice.toStringAsFixed(2)}",
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,

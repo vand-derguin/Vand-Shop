@@ -12,9 +12,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,8 +41,8 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               children: [
                 TextField(
-                  controller: _usernameController,
-                  decoration: const InputDecoration(labelText: "Username"),
+                  controller: _emailController,
+                  decoration: const InputDecoration(labelText: "Email"),
                 ),
                 TextField(
                   controller: _passwordController,
@@ -55,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () {
                     context.read<AuthBloc>().add(
                       AuthLoginRequested(
-                        _usernameController.text,
+                        _emailController.text,
                         _passwordController.text,
                       ),
                     );

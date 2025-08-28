@@ -49,14 +49,14 @@ class CheckoutPage extends StatelessWidget {
                             fit: BoxFit.cover,
                           ),
                           title: Text(product["name"] ?? "Unnamed"),
-                          subtitle: Text("Price: ${product["price"]}"),
+                          subtitle: Text("fcfa: ${product["price"]}"),
                         ),
                       );
                     },
                   ),
                 ),
                 Text(
-                  "Total: \$${totalPrice.toStringAsFixed(2)}",
+                  "Total: fcfa ${totalPrice.toStringAsFixed(2)}",
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,

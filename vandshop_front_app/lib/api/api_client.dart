@@ -9,17 +9,16 @@ class ApiClient {
   ApiClient({required this.baseUrl, required this.tokenStorage});
 
   /// LOGIN
-  Future<Map<String, dynamic>> login(String username, String password) async {
+  Future<Map<String, dynamic>> login(String email, String password) async {
     final url = Uri.parse('$baseUrl/auth/login');
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
-      body: json.encode({'username': username, 'password': password}),
+      body: json.encode({'email': email, 'password': password}),
     );
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      // Save token if exists
       if (data['token'] != null) {
         await tokenStorage.saveToken(data['token']);
       }
