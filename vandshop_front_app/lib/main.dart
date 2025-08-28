@@ -5,19 +5,33 @@ import 'api/api_client.dart';
 import 'api/token_storage.dart';
 import 'blocs/auth/auth_bloc.dart';
 import 'blocs/products/products_bloc.dart';
-// import 'blocs/cart/cart_cubit.dart';
+import 'blocs/cart/cart_bloc.dart';
 
-import 'ui/login_page.dart';
+// import 'ui/login_page.dart';
+
 import 'ui/products_page.dart';
-// import 'ui/cart_page.dart';
+import 'ui/checkout_page.dart';
+import 'ui/cart_page.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   final tokenStorage = TokenStorage();
   final apiClient = ApiClient(
-    baseUrl: "http://localhost:3000",
+    baseUrl: "http://192.168.164.234:3000",
     tokenStorage: tokenStorage,
-  ); // Android emulator localhost
-  runApp(MyApp(apiClient: apiClient));
+  );
+
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider<AuthBloc>(create: (_) => AuthBloc(apiClient)),
+        BlocProvider<ProductsBloc>(create: (_) => ProductsBloc(apiClient)),
+        BlocProvider<CartBloc>(create: (_) => CartBloc()),
+      ],
+      child: MyApp(apiClient: apiClient),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -26,19 +40,28 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (_) => AuthBloc(apiClient)),
-        BlocProvider(create: (_) => ProductsBloc(apiClient)),
-      ],
-      child: MaterialApp(
-        title: 'VandShop',
-        initialRoute: "/login",
-        routes: {
-          "/login": (_) => const LoginPage(),
-          "/products": (_) => const ProductsPage(),
-        },
-      ),
+    return MaterialApp(
+      title: 'VandShop',
+      debugShowCheckedModeBanner: false,
+      initialRoute: '/products', // 👈 start here
+      onGenerateRoute: (settings) {
+        switch (settings.name) {
+          case '/products':
+            return MaterialPageRoute(
+              builder: (context) => const ProductsPage(),
+            );
+          case '/cart':
+            return MaterialPageRoute(builder: (context) => const CartPage());
+          case '/checkout':
+            return MaterialPageRoute(
+              builder: (context) => const CheckoutPage(),
+            );
+          default:
+            return MaterialPageRoute(
+              builder: (context) => const ProductsPage(),
+            );
+        }
+      },
     );
   }
 }

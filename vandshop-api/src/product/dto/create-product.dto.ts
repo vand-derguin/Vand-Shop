@@ -1,12 +1,33 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsString, IsInt, IsOptional, IsNumber, Min } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateProductDto {
-  @ApiProperty() @IsString() name: string;
-  @ApiProperty() @IsString() description: string;
-  @ApiProperty({ required: false }) @IsOptional() @IsString() barcode?: string;
-  @ApiProperty({ required: false }) @IsOptional() @IsString() sku?: string;
-  @ApiProperty() @IsNumber() price: number;
-  @ApiProperty() @IsNumber() category: number;
-  @ApiProperty() @IsNumber() stock: number;
+  @IsString()
+  name: string;
+
+  @IsString()
+  description: string;
+
+  @IsNumber()
+  @Type(() => Number)
+  @Min(0)
+  price: number;
+
+  @IsOptional()
+  @IsString()
+  barcode?: string;
+
+  @IsOptional()
+  @IsString()
+  sku?: string;
+
+  @IsInt()
+  @Type(() => Number) // converts incoming string to number
+  categoryId: number;
+
+  @IsOptional()
+  @IsInt()
+  @Type(() => Number)
+  @Min(0)
+  stock?: number;
 }

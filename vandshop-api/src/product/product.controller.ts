@@ -25,8 +25,8 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post()
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  // @ApiBearerAuth()
+  // @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileFieldsInterceptor([{ name: 'images', maxCount: 3 }]))
   create(
     @Body() createProductDto: CreateProductDto,

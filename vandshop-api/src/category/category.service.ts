@@ -8,17 +8,19 @@ import { Category } from '@prisma/client';
 export class CategoryService {
   constructor(private prisma: PrismaService) {}
   async create(createCategoryDto: CreateCategoryDto) {
-    const category = await this.prisma.category.create({data: createCategoryDto})
-    if(!category){
-      throw new HttpException("something went wrong", HttpStatus.NOT_FOUND)
+    const category = await this.prisma.category.create({
+      data: createCategoryDto,
+    });
+    if (!category) {
+      throw new HttpException('something went wrong', HttpStatus.NOT_FOUND);
     }
     return category;
   }
 
-  async findAll():Promise<Category[]> {
+  async findAll(): Promise<Category[]> {
     const categories = await this.prisma.category.findMany({});
-    if(!categories){
-      throw new HttpException("something went wrong", HttpStatus.NOT_FOUND)
+    if (!categories) {
+      throw new HttpException('something went wrong', HttpStatus.NOT_FOUND);
     }
     return categories;
   }

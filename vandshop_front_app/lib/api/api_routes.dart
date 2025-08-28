@@ -1,7 +1,7 @@
 class ApiRoutes {
-  static const String login = "/auth/login";
-  static const String register = "/auth/register";
-  static const String products = "/products";
-  static const String cart = "/cart";
-  static const String checkout = "/checkout";
+  static const String login = "/api/auth/login";
+  static const String register = "/api/user";
+  static const String products = "/api/products";
+  static const String cart = "/api/cart";
+  static const String checkout = "/api/checkout";
 }

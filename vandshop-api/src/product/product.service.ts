@@ -27,15 +27,14 @@ export class ProductService {
         barcode: createProductDto.barcode,
         stock: createProductDto.stock,
         sku: createProductDto.sku,
-        category: { connect: { id: createProductDto.category } }, // Connect category by ID
-        ProductImage: {
-          create: uploadedImages.map((url) => ({
-            url,
-          })),
+        category: { connect: { id: createProductDto.categoryId } },
+        images: {
+          // ✅ was ProductImage
+          create: uploadedImages.map((url) => ({ url })),
         },
       },
       include: {
-        ProductImage: { select: { url: true } },
+        images: { select: { url: true } }, // ✅ was ProductImage
       },
     });
 
@@ -45,12 +44,10 @@ export class ProductService {
   async findAll(q?: string): Promise<Product[]> {
     const products = await this.prisma.product.findMany({
       where: q
-        ? {
-            OR: [{ name: { contains: q } }, { barcode: { contains: q } }],
-          }
+        ? { OR: [{ name: { contains: q } }, { barcode: { contains: q } }] }
         : undefined,
       orderBy: { createdAt: 'desc' },
-      include: { ProductImage: { select: { url: true } } },
+      include: { images: { select: { url: true } } }, // ✅ was ProductImage
     });
 
     if (!products) {
@@ -60,15 +57,15 @@ export class ProductService {
     return products;
   }
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} product`;
-  // }
+  findOne(id: number) {
+    return `This action returns a #${id} product`;
+  }
 
   update(id: string, data: Partial<CreateProductDto>) {
-    const { category, ...rest } = data;
+    const { categoryId, ...rest } = data;
     const updateData: any = { ...rest };
-    if (category !== undefined) {
-      updateData.category = { connect: { id: category } };
+    if (categoryId !== undefined) {
+      updateData.category = { connect: { id: categoryId } };
     }
     return this.prisma.product.update({ where: { id }, data: updateData });
   }
