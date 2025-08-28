@@ -10,22 +10,27 @@ class AuthInitial extends AuthState {}
 class AuthLoading extends AuthState {}
 
 class AuthAuthenticated extends AuthState {
-  final String username;
-  final String token;
+  final String name;
+  final String email;
+  final String address;
 
-  AuthAuthenticated({required this.username, required this.token});
+  AuthAuthenticated({
+    required this.name,
+    required this.email,
+    required this.address,
+  });
 
   @override
-  List<Object?> get props => [username, token];
+  List<Object?> get props => [name, email, address];
 }
 
-class AuthFailure extends AuthState {
+class AuthError extends AuthState {
   final String message;
 
-  AuthFailure({required this.message});
+  AuthError(this.message);
 
   @override
   List<Object?> get props => [message];
 }
 
-class AuthUnauthenticated extends AuthState {}
+class AuthLoggedOut extends AuthState {}

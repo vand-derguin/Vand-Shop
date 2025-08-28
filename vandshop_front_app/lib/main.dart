@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: '/products', // Start with products page
       routes: {
-        '/login': (_) => const LoginPage(),
+        '/login': (_) => LoginPage(),
         '/products': (_) => const ProductsPage(),
         '/cart': (_) => const CartPage(),
         '/checkout': (_) => const CheckoutPage(),

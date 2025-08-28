@@ -56,7 +56,10 @@ class _ProductsPageState extends State<ProductsPage> {
                 return Center(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: Text("Hi, ${state.username}"),
+                    child: Text(
+                      "Hi, ${state.email}",
+                      style: TextStyle(color: Color(0xFF080404)),
+                    ),
                   ),
                 );
               } else {

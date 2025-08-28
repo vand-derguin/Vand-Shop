@@ -4,16 +4,12 @@ import '../blocs/auth/auth_bloc.dart';
 import '../blocs/auth/auth_event.dart';
 import '../blocs/auth/auth_state.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
-
-  @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
+class LoginPage extends StatelessWidget {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  LoginPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,12 +19,12 @@ class _LoginPageState extends State<LoginPage> {
           if (state is AuthAuthenticated) {
             ScaffoldMessenger.of(
               context,
-            ).showSnackBar(const SnackBar(content: Text("Login successful!")));
-            Navigator.pushReplacementNamed(context, "/products");
-          } else if (state is AuthFailure) {
+            ).showSnackBar(SnackBar(content: Text("Welcome, ${state.name}")));
+            Navigator.pop(context); // back to products page
+          } else if (state is AuthError) {
             ScaffoldMessenger.of(
               context,
-            ).showSnackBar(SnackBar(content: Text("Error: ${state.message}")));
+            ).showSnackBar(SnackBar(content: Text(state.message)));
           }
         },
         builder: (context, state) {
@@ -46,16 +42,16 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 TextField(
                   controller: _passwordController,
-                  obscureText: true,
                   decoration: const InputDecoration(labelText: "Password"),
+                  obscureText: true,
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
                     context.read<AuthBloc>().add(
                       AuthLoginRequested(
-                        _emailController.text,
-                        _passwordController.text,
+                        _emailController.text.trim(),
+                        _passwordController.text.trim(),
                       ),
                     );
                   },

@@ -17,12 +17,9 @@ class ApiClient {
       body: json.encode({'email': email, 'password': password}),
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       final data = json.decode(response.body);
-      if (data['token'] != null) {
-        await tokenStorage.saveToken(data['token']);
-      }
-      return data;
+      return data; // contains name, email, password, address
     } else {
       throw Exception('Login failed: ${response.body}');
     }

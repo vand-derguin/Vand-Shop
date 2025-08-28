@@ -1,9 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../api/api_client.dart';
-import '../../api/token_storage.dart';
-
 import 'auth_event.dart';
 import 'auth_state.dart';
+import '../../api/api_client.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final ApiClient apiClient;
@@ -18,30 +16,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     emit(AuthLoading());
-
     try {
-      // Call your API login endpoint
-      final response = await apiClient.login(event.username, event.password);
-
-      // Save token locally
-      await apiClient.tokenStorage.saveToken(response["token"]);
+      final data = await apiClient.login(event.email, event.password);
 
       emit(
         AuthAuthenticated(
-          username: response["username"],
-          token: response["token"],
+          name: data['name'] ?? '',
+          email: data['email'] ?? event.email,
+          address: data['address'] ?? '',
         ),
       );
     } catch (e) {
-      emit(AuthFailure(message: e.toString()));
+      emit(AuthError(e.toString()));
     }
   }
 
-  Future<void> _onLogoutRequested(
-    AuthLogoutRequested event,
-    Emitter<AuthState> emit,
-  ) async {
-    await apiClient.tokenStorage.clearToken();
-    emit(AuthUnauthenticated());
+  void _onLogoutRequested(AuthLogoutRequested event, Emitter<AuthState> emit) {
+    emit(AuthLoggedOut());
   }
 }

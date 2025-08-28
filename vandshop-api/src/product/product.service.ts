@@ -44,15 +44,13 @@ export class ProductService {
   async findAll(q?: string): Promise<Product[]> {
     const products = await this.prisma.product.findMany({
       where: q
-        ? { OR: [{ name: { contains: q } }, { barcode: { contains: q } }] }
+        ? {
+            OR: [{ name: { contains: q } }, { barcode: { contains: q } }],
+          }
         : undefined,
       orderBy: { createdAt: 'desc' },
-      include: { images: { select: { url: true } } }, // ✅ was ProductImage
+      include: { images: { select: { url: true } } },
     });
-
-    if (!products) {
-      throw new HttpException('no avalable product', HttpStatus.NOT_FOUND);
-    }
 
     return products;
   }
