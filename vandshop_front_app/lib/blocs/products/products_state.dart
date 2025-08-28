@@ -1,28 +1,28 @@
 import 'package:equatable/equatable.dart';
 
 class ProductsState extends Equatable {
-  final List<dynamic> products;
   final bool loading;
+  final List<Map<String, dynamic>> products;
   final String? error;
 
   const ProductsState({
-    this.products = const [],
     this.loading = false,
+    this.products = const [],
     this.error,
   });
 
   ProductsState copyWith({
-    List<dynamic>? products,
     bool? loading,
+    List<Map<String, dynamic>>? products,
     String? error,
   }) {
     return ProductsState(
-      products: products ?? this.products,
       loading: loading ?? this.loading,
+      products: products ?? this.products,
       error: error,
     );
   }
 
   @override
-  List<Object?> get props => [products, loading, error];
+  List<Object?> get props => [loading, products, error ?? ""];
 }

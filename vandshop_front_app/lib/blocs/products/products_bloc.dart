@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../api/api_client.dart';
 import 'products_event.dart';
 import 'products_state.dart';
+import '../../api/api_client.dart';
 
 class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
   final ApiClient apiClient;
@@ -14,12 +14,12 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
     LoadProducts event,
     Emitter<ProductsState> emit,
   ) async {
-    emit(state.copyWith(loading: true));
+    emit(state.copyWith(loading: true, error: null));
     try {
-      final products = await apiClient.getProducts();
-      emit(state.copyWith(products: products, loading: false));
+      final products = await apiClient.getProducts(query: event.query);
+      emit(state.copyWith(loading: false, products: products));
     } catch (e) {
-      emit(state.copyWith(error: e.toString(), loading: false));
+      emit(state.copyWith(loading: false, error: e.toString()));
     }
   }
 }
