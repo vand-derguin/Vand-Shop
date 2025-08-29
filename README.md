@@ -2,7 +2,7 @@
 --------------description-------
 
 
-1️⃣ Choix et configuration de la base de données
+1️ Choix et configuration de la base de données
 
 Pour ce projet, j'ai choisi MySQL avec Prisma ORM pour les raisons suivantes :
 
