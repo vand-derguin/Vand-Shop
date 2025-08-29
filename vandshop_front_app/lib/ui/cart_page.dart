@@ -10,17 +10,11 @@ class CartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Cart")),
+      appBar: AppBar(title: const Text("Your Cart")),
       body: BlocBuilder<CartBloc, CartState>(
         builder: (context, state) {
           if (state.items.isEmpty) {
             return const Center(child: Text("Your cart is empty"));
-          }
-
-          double totalPrice = 0;
-          for (var item in state.items) {
-            totalPrice +=
-                double.tryParse(item["price"]?.toString() ?? "0") ?? 0;
           }
 
           return Column(
@@ -29,31 +23,54 @@ class CartPage extends StatelessWidget {
                 child: ListView.builder(
                   itemCount: state.items.length,
                   itemBuilder: (context, index) {
-                    final product = state.items[index];
-                    final imageUrl =
-                        (product["images"] != null &&
-                            product["images"].isNotEmpty)
-                        ? product["images"][0]["url"]
-                        : "https://via.placeholder.com/150";
+                    final item = state.items[index];
+                    final product = item['product'];
+                    final quantity = item['quantity'] ?? 1;
 
                     return Card(
-                      margin: const EdgeInsets.all(8),
+                      margin: const EdgeInsets.symmetric(
+                        vertical: 8,
+                        horizontal: 12,
+                      ),
                       child: ListTile(
-                        leading: Image.network(
-                          imageUrl,
-                          width: 50,
-                          height: 50,
-                          fit: BoxFit.cover,
+                        leading:
+                            (product['images'] != null &&
+                                product['images'].isNotEmpty)
+                            ? Image.network(
+                                product['images'][0]['url'],
+                                width: 50,
+                                height: 50,
+                                fit: BoxFit.cover,
+                              )
+                            : const Icon(Icons.image_not_supported, size: 40),
+                        title: Text(product['name'] ?? 'No Name'),
+                        subtitle: Text(
+                          "Price: fcfa ${product['price']} \nQuantity: $quantity",
                         ),
-                        title: Text(product["name"] ?? "Unnamed"),
-                        subtitle: Text("Price: ${product["price"]}"),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.delete),
-                          onPressed: () {
-                            context.read<CartBloc>().add(
-                              RemoveFromCart(product),
-                            );
-                          },
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.remove_circle_outline),
+                              onPressed: () {
+                                context.read<CartBloc>().add(
+                                  DecrementQuantity(product['id'].toString()),
+                                );
+                              },
+                            ),
+                            Text(
+                              "$quantity",
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.add_circle_outline),
+                              onPressed: () {
+                                context.read<CartBloc>().add(
+                                  IncrementQuantity(product['id'].toString()),
+                                );
+                              },
+                            ),
+                          ],
                         ),
                       ),
                     );
@@ -61,26 +78,27 @@ class CartPage extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    Text(
-                      "Total: fcfa ${totalPrice.toStringAsFixed(2)}",
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/checkout');
-                      },
-                      child: const Text("Proceed to Checkout"),
-                    ),
-                  ],
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  "Total: fcfa ${state.total.toStringAsFixed(2)}",
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
+              // Optional: Checkout button
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Navigate to checkout page
+                    Navigator.pushNamed(context, '/checkout');
+                  },
+                  child: const Text("Proceed to Checkout"),
+                ),
+              ),
+              const SizedBox(height: 16),
             ],
           );
         },

@@ -135,6 +135,15 @@ class _ProductsPageState extends State<ProductsPage> {
                   ),
                 ),
                 const SizedBox(width: 8),
+                // 🔍 Search button
+                IconButton(
+                  icon: const Icon(Icons.search),
+                  onPressed: () {
+                    _searchProducts(_searchController.text);
+                  },
+                ),
+                const SizedBox(width: 8),
+                // 📷 Barcode button
                 IconButton(
                   icon: const Icon(Icons.qr_code_scanner),
                   onPressed: _scanBarcode,
@@ -164,6 +173,13 @@ class _ProductsPageState extends State<ProductsPage> {
             itemCount: state.products.length,
             itemBuilder: (context, index) {
               final product = state.products[index];
+
+              // Normalize price to double
+              final normalizedProduct = Map<String, dynamic>.from(product);
+              if (normalizedProduct["price"] is String) {
+                normalizedProduct["price"] =
+                    double.tryParse(normalizedProduct["price"]) ?? 0;
+              }
 
               final imageUrl =
                   (product["images"] != null &&
@@ -208,11 +224,13 @@ class _ProductsPageState extends State<ProductsPage> {
                             ),
                           ),
                           const SizedBox(height: 4),
-                          Text("fcfa: ${product["price"] ?? "?"}"),
+                          Text("fcfa: ${normalizedProduct["price"]}"),
                           const SizedBox(height: 8),
                           ElevatedButton(
                             onPressed: () {
-                              context.read<CartBloc>().add(AddToCart(product));
+                              context.read<CartBloc>().add(
+                                AddToCart(normalizedProduct),
+                              );
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(

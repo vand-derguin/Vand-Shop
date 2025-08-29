@@ -3,10 +3,24 @@ import 'package:equatable/equatable.dart';
 class CartState extends Equatable {
   final List<Map<String, dynamic>> items;
 
-  const CartState({this.items = const []});
+  const CartState({required this.items});
 
-  CartState copyWith({List<Map<String, dynamic>>? items}) {
-    return CartState(items: items ?? this.items);
+  /// Calculate total dynamically
+  double get total {
+    double sum = 0;
+    for (var item in items) {
+      final product = item["product"];
+      final price = product["price"];
+      final qty = item["quantity"] ?? 1;
+
+      // Ensure price is treated as num/double
+      final priceValue = price is String
+          ? double.tryParse(price) ?? 0
+          : (price ?? 0);
+
+      sum += priceValue * qty;
+    }
+    return sum;
   }
 
   @override

@@ -17,12 +17,6 @@ class CheckoutPage extends StatelessWidget {
             return const Center(child: Text("Your cart is empty"));
           }
 
-          double totalPrice = 0;
-          for (var item in state.items) {
-            totalPrice +=
-                double.tryParse(item["price"]?.toString() ?? "0") ?? 0;
-          }
-
           return Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -32,11 +26,15 @@ class CheckoutPage extends StatelessWidget {
                   child: ListView.builder(
                     itemCount: state.items.length,
                     itemBuilder: (context, index) {
-                      final product = state.items[index];
+                      final item = state.items[index];
+                      final product = item['product'];
+                      final quantity = item['quantity'] ?? 1;
+
                       final imageUrl =
-                          (product["images"] != null &&
-                              product["images"].isNotEmpty)
-                          ? product["images"][0]["url"]
+                          (product['images'] != null &&
+                              product['images'].isNotEmpty &&
+                              product['images'][0]['url'] != null)
+                          ? product['images'][0]['url']
                           : "https://via.placeholder.com/150";
 
                       return Card(
@@ -48,24 +46,53 @@ class CheckoutPage extends StatelessWidget {
                             height: 50,
                             fit: BoxFit.cover,
                           ),
-                          title: Text(product["name"] ?? "Unnamed"),
-                          subtitle: Text("fcfa: ${product["price"]}"),
+                          title: Text(product['name'] ?? 'Unnamed'),
+                          subtitle: Text(
+                            "Price: fcfa ${product['price']} x $quantity = fcfa ${(double.tryParse(product['price'].toString()) ?? 0) * quantity}",
+                          ),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.remove_circle_outline),
+                                onPressed: () {
+                                  context.read<CartBloc>().add(
+                                    DecrementQuantity(product['id'].toString()),
+                                  );
+                                },
+                              ),
+                              Text(
+                                "$quantity",
+                                style: const TextStyle(fontSize: 16),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.add_circle_outline),
+                                onPressed: () {
+                                  context.read<CartBloc>().add(
+                                    IncrementQuantity(product['id'].toString()),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                       );
                     },
                   ),
                 ),
+                const SizedBox(height: 12),
                 Text(
-                  "Total: fcfa ${totalPrice.toStringAsFixed(2)}",
+                  "Total: fcfa ${state.total.toStringAsFixed(2)}",
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
+                  textAlign: TextAlign.right,
                 ),
                 const SizedBox(height: 12),
                 ElevatedButton(
                   onPressed: () {
-                    // Here you can call your API to finalize the sale
+                    // Finalize the sale
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text("Order placed successfully!"),
